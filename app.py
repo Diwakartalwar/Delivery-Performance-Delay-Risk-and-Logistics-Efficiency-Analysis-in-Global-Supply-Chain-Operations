@@ -17,9 +17,6 @@ st.title("Supply Chain Analytics Dashboard")
 df = load_data("APL_Logistics.csv")
 df = clean_data(df)
 df = add_features(df)
-
-kpis = calculate_kpis(df)
-
 filters = DynamicFilters(
     df,
     filters=[
@@ -32,33 +29,41 @@ filters = DynamicFilters(
 st.sidebar.header("Filter Data")
 filters.display_filters(location="sidebar")
 df = filters.filter_df()
+if selected == "Overview":
+    st.subheader("Key Metrics")
+    kpis = calculate_kpis(df)
 
-st.subheader("Key Metrics")
+    col1, col2, col3 = st.columns(3)
 
-col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown(f"""
+        <div style='background-color:#1e1e1e;padding:20px;border-radius:10px'>
+            <h4>On-Time Delivery %</h4>
+            <h2>{kpis['on_time_rate']:.2f}%</h2>
+        </div>
+        """, unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.markdown("""
-    <div style='background-color:#1e1e1e;padding:20px;border-radius:10px'>
-        <h4>On-Time Delivery %</h4>
-        <h2>18.70%</h2>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    st.markdown("""
-    <div style='background-color:#1e1e1e;padding:20px;border-radius:10px'>
+    with col2:
+        st.markdown(f"""
+        <div style='background-color:#1e1e1e;padding:20px;border-radius:10px'>
         <h4>Avg Delay (days)</h4>
-        <h2>0.57</h2>
-    </div>
-    """, unsafe_allow_html=True)
+        <h2>{kpis['avg_delay']:.2f}</h2>
+        </div>
+        """, unsafe_allow_html=True)
 
-with col3:
-    st.markdown("""
-    <div style='background-color:#1e1e1e;padding:20px;border-radius:10px'>
-        <h4>Late Risk Ratio</h4>
-        <h2>0.55</h2>
-    </div>
-    """, unsafe_allow_html=True)
+    with col3:
+        st.markdown(f"""
+        <div style='background-color:#1e1e1e;padding:20px;border-radius:10px'>
+            <h4>Late Risk Ratio</h4>
+            <h2>{kpis['risk_ratio']:.2f}</h2>
+        </div>
+        """, unsafe_allow_html=True)
+
+elif selected == "Analysis":
+    st.subheader("Analysis Section")
+    st.write("Add charts here")
+
+elif selected == "Insights":
+    st.subheader("Insights Section")
+    st.write("Add insights here")
+
