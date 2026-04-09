@@ -20,7 +20,10 @@ def clean_data(df):
         "Days for shipment (scheduled)",
         "Late_delivery_risk"
     ])
-
+    df["Order Region"] = df["Order Region"].str.strip()
+    df["Shipping Mode"] = df["Shipping Mode"].str.strip()
+    df["Customer Segment"] = df["Customer Segment"].str.strip()
+    df["Market"] = df["Market"].str.strip()
     # Convert to numeric (safe)
     df["Days for shipping (real)"] = pd.to_numeric(df["Days for shipping (real)"], errors="coerce")
     df["Days for shipment (scheduled)"] = pd.to_numeric(df["Days for shipment (scheduled)"], errors="coerce")
